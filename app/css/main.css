@@ -1,0 +1,28 @@
+header {
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  height: 140px;
+  background-color: #7AC143; }
+  header img {
+    display: block;
+    float: left;
+    margin-top: 5px;
+    width: 42px;
+    height: 30px; }
+  header h1 {
+    float: left;
+    margin-top: 8px;
+    font-size: 24px;
+    font-family: arial; }
+  header div {
+    clear: both;
+    width: 100%;
+    height: 100px;
+    background-color: blue; }
+
+main {
+  width: 100%;
+  height: 100px;
+  background-color: lightgreen; }
+
+/*# sourceMappingURL=main.css.map */

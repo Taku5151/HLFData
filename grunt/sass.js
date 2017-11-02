@@ -4,8 +4,8 @@ module.exports = {
     },
     dist: {
       files: {
-        'dist/css/reset.css' : 'app/css/reset.scss',
-        'dist/css/main.css' : 'app/css/main.scss'
+        'app/css/reset.css' : 'app/scss/reset.scss',
+        'app/css/main.css' : 'app/scss/main.scss'
       }
     }
 }
