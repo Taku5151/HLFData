@@ -21,5 +21,8 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-sass": "^2.0.0",
     "load-grunt-config": "^0.19.2"
+  },
+  "dependencies": {
+    "chart.js": "^2.7.1"
   }
 }
