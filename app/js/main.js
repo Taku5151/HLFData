@@ -2,6 +2,7 @@ const demandDS = new DataSet("demand");
 const invtxnDS = new DataSet("invrftxn");
 const invlineDS = new DataSet("invrfline");
 const reserveDS = new DataSet("reserve");
+const receiptsDS = new DataSet("receipts");
 const input = new InputManager();
 
 let skutextbox;
@@ -331,12 +332,34 @@ reserveDS._compileChartdata = (data) => {
   return newChartData;
 }
 
+receiptsDS.addDim("Date", "Month", "TxnDate");
+receiptsDS.addDim("Item", "Sku", "Item");
+receiptsDS.addDim("Type", "Type", "SourcePrice")
+receiptsDS.addValue("Qty", "Qty", "Quantity");
+receiptsDS.setCurrentDimX("Month");
+receiptsDS.setCurrentDimY("Type");
+receiptsDS.setCurrentValues("Qty");
+receiptsDS.setTitle("Receipt Data");
+receiptsDS._generateSQL = (dimx, dimy, value, table, filters) => {
+  //pure function
+  let sql = `SELECT DATE_FORMAT(txndate, "%Y-%m") as ${dimx.field}, CONCAT(source, '-', CurrencyCode, '-', ROUND(price, 2)) as ${dimy.field}, SUM(if(txntype='Return to Supplier', -Quantity, Quantity)) as ${value.field} FROM ${table}`;
+  for (let i = 0; i < filters.length; i++) {
+    if(i === 0)
+    sql += " WHERE ";
+    else
+    sql += " AND ";
+    sql += `${filters[i].dimKey.field} ${filters[i].criteria}`;
+  }
+  sql += ` GROUP BY DATE_FORMAT(txndate, "%Y-%m"), CONCAT(source, '-', CurrencyCode, '-', ROUND(price, 2)) ORDER BY ${dimx.field}, ${dimy.field};`;
+  return sql;
+}
 
 function onLoad() {
   demandDS.setDOMElement("demandDS");
   invtxnDS.setDOMElement("invtxnDS");
   invlineDS.setDOMElement("invlineDS");
   reserveDS.setDOMElement("reserveDS");
+  receiptsDS.setDOMElement("receiptsDS");
   resetInput();
 }
 
@@ -380,5 +403,11 @@ function executequery() {
   reserveDS.addFilter("Month", `<='${totextbox.value}'`);
   reserveDS.addFilter("Sku", `='${skutextbox.value}'`);
   reserveDS.refreshData();
+
+  receiptsDS.clearFilter();
+  receiptsDS.addFilter("Month", `>='${fromtextbox.value}'`);
+  receiptsDS.addFilter("Month", `<='${UtilGetSQLDate(new Date(toDate.getFullYear(), toDate.getMonth() + 1, 0))}'`);
+  receiptsDS.addFilter("Sku", `='${skutextbox.value}'`);
+  receiptsDS.refreshData();
 
 }
