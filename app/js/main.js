@@ -365,13 +365,13 @@ function onLoad() {
 
 function resetInput() {
   const now = new Date();
-  const firstOfyear = new Date(now.getFullYear(), 0, 1);
+  const twelvemonthsago = new Date(now.getFullYear(), now.getMonth() - 12, 1);
   const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   fromtextbox = document.querySelector("input[name='fromtextbox']");
   totextbox = document.querySelector("input[name='totextbox']");
   skutextbox = document.querySelector("input[name='skutextbox']");
 
-  fromtextbox.value = UtilGetSQLDate(firstOfyear);
+  fromtextbox.value = UtilGetSQLDate(twelvemonthsago);
   totextbox.value = UtilGetSQLDate(lastMonth);
   skutextbox.focus();
 }
